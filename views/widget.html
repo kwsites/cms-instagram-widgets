@@ -1,0 +1,10 @@
+{% if data.widget._profile %}
+<article class="kwsites-instagram-widget">
+   {%- if data.widget.title %}<header>{{ data.widget.title }}</header>{% endif -%}
+   <ul data-column-count="{{ data.widget.columns }}">
+      {%- for thumbnail in data.widget._profile.media -%}
+         {%- include "thumbnail.html" -%}
+      {%- endfor -%}
+   </ul>
+</article>
+{% endif %}

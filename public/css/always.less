@@ -1,0 +1,37 @@
+
+.kwsites-instagram-widget {
+
+   ul {
+      .grid();
+      .grid-template-columns(1fr 1fr 1fr);
+      .grid-gap(@padding-size / 2);
+
+      &[data-column-count="2"] {
+         .grid-template-columns(1fr 1fr);
+      }
+
+      &[data-column-count="4"] {
+         .grid-template-columns(1fr 1fr 1fr 1fr);
+      }
+   }
+
+   li {
+      .aspect-ratio-square();
+      background-size: cover;
+      position: relative;
+   }
+
+   .kwsites-instagram-link {
+      display: block;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+
+      &:hover {
+         background: rgba(255, 255, 255, 0.2);
+      }
+   }
+
+}
