@@ -21,14 +21,21 @@ module.exports = {
          name: 'columns',
          label: 'Grid Column Count',
          def: 3
+      },
+      {
+         type: 'integer',
+         name: 'limit',
+         label: 'Max image display',
+         def: -1
       }
    ],
 
    construct (self, options) {
 
-      self.pushAssets = () => {
-         self.pushAsset('stylesheet', 'always', {when: 'always'});
-      };
+      self.pushAssets = _.wrap(self.pushAssets, (superFn) => {
+         self.pushAsset('stylesheet', 'always', { when: 'always', data: true });
+         superFn();
+      });
 
       self.load = _.wrap(self.load, load);
 
@@ -47,10 +54,6 @@ module.exports = {
             .then(() => superFn(req, widgets, callback))
             .catch((err) => callback(err));
       }
-   },
-
-   afterConstruct (self) {
-      self.pushAssets();
-   },
+   }
 
 };
