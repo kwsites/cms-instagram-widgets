@@ -42,6 +42,10 @@ module.exports = {
       function load (superFn, req, widgets, callback) {
          const loaders = widgets.map(async (widget) => {
             const profileLoader = new InstagramProfileLoader(widget.username);
+            if (_.get(self, 'apos.options.locals.offline') === true) {
+               return widget._profile = null;
+            }
+
             try {
                widget._profile = await profileLoader.get();
             }
