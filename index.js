@@ -59,6 +59,11 @@ module.exports = {
 
    construct (self, options) {
 
+      self.pushAssets = _.wrap(self.pushAssets, (superFn) => {
+         self.pushAsset('stylesheet', 'always', { when: 'always', data: true });
+         superFn();
+      });
+
       self.load = _.wrap(self.load, load);
       self.sanitize = _.wrap(self.sanitize, sanitize);
 
