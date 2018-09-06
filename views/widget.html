@@ -11,4 +11,6 @@
       {%- endfor -%}
    </ul>
 </article>
+{%- elseif data.widget._embed -%}
+   {%- include "embed.html" -%}
 {% endif %}
