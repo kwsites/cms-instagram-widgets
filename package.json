@@ -23,7 +23,7 @@
   "license": "MIT",
   "repository": "git://github.com/kwsites/cms-instagram-widgets.git",
   "peerDependencies": {
-    "lodash": "<3.10"
+    "lodash": ">3.10"
   },
   "dependencies": {
     "@kwsites/promise-cache": "^0.0.1",
