@@ -8,7 +8,7 @@
    });
 
    function play () {
-      if (jQuery('.instagram-media:not(.instagram-media-rendered)').length > 0) {
+      if (jQuery('.instagram-media:not(.instagram-media-rendered)').length === 0) {
          return;
       }
 

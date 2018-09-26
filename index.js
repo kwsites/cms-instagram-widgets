@@ -67,8 +67,8 @@ module.exports = {
       self.load = _.wrap(self.load, load);
       self.sanitize = _.wrap(self.sanitize, sanitize);
 
-      async function sanitize (superFn, req, input, callback) {
-         superFn(req, input, (err, data) => {
+      function sanitize (superFn, req, input, callback) {
+         superFn(req, input, async (err, data) => {
 
             if (err) {
                return callback(err, data);
@@ -84,7 +84,8 @@ module.exports = {
             }
 
             try {
-               data._embed = oEmbed(req, data.url);
+               data._embed = await oEmbed(req, data.url);
+               callback(null, data);
             }
             catch (e) {
                callback(e);
