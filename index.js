@@ -57,9 +57,16 @@ module.exports = {
       },
    ],
 
+   afterConstruct (self) {
+
+      require('./lib/instagram-oembetter')(self, self.apos.oembed.oembetter);
+
+   },
+
    construct (self, options) {
 
       self.pushAssets = _.wrap(self.pushAssets, (superFn) => {
+
          self.pushAsset('stylesheet', 'always', { when: 'always', data: true });
          superFn();
       });
@@ -124,7 +131,9 @@ module.exports = {
 
       function oEmbed (req, url) {
          return new Promise((done, fail) => {
-            self.apos.oembed.query(req, url, {}, (err, data) => {
+
+            self.apos.oembed.query(req, url.replace(/\?.+$/, ''), {neverOpenGraph: true}, (err, data) => {
+
                if (err) {
                   return fail(err);
                }
