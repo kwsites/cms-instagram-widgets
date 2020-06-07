@@ -11,8 +11,7 @@
     }
   ],
   "scripts": {
-    "postversion": "npm publish && git push && git push --tags",
-    "setup": "node ./scripts/setup"
+    "postversion": "npm publish && git push && git push --tags"
   },
   "files": [
     "index.js",
@@ -22,12 +21,10 @@
   ],
   "license": "MIT",
   "repository": "git://github.com/kwsites/cms-instagram-widgets.git",
-  "peerDependencies": {
-    "lodash": ">3.10"
-  },
   "dependencies": {
     "@kwsites/promise-cache": "^0.0.1",
-    "node-fetch": "^2.1.2",
-    "parse5": "^4.0.0"
+    "bent": "^7.3.2",
+    "lodash": "^4",
+    "parse5": "^6.0.0"
   }
 }
