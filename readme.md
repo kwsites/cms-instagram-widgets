@@ -19,7 +19,7 @@ apostrophe({
     '@kwsites/cms-instagram-widgets': {},
   }
 });
-``` 
+```
 
 To use the widget in an `area`:
 
@@ -55,7 +55,26 @@ automatically after installing dependencies, add the following to your `package.
 }
 ```
 
+## Troubleshooting
 
+This library uses [debug](https://www.npmjs.com/package/debug) to manage its logging,
+enable the log by running your application with the `DEBUG` environment variable:
+
+```
+$ DEBUG=@kwsites/cms-instagram-widgets:* node app.js
+```
+
+Alternatively, set the `verbose` option for this module in your `app.js`:
+
+```javascript
+// app.js
+apostrophe({
+  modules: {
+    '@kwsites/cms-common': {},
+    '@kwsites/cms-instagram-widgets': { verbose: true },
+  }
+});
+```
 
 
 

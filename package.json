@@ -24,6 +24,7 @@
   "dependencies": {
     "@kwsites/promise-cache": "^0.0.1",
     "bent": "^7.3.2",
+    "debug": "^4.1.1",
     "lodash": "^4",
     "parse5": "^6.0.0"
   }

@@ -1,9 +1,14 @@
-const _ = require('lodash');
+const debug = require('debug');
+const {get, wrap} = require('lodash');
 const {InstagramProfileLoader} = require('./lib/instagram-profile-loader');
 
 module.exports = {
    extend: 'apostrophe-widgets',
+
    label: 'Instagram Widget',
+
+   verbose: true,
+
    addFields: [
       {
          type: 'string',
@@ -57,6 +62,13 @@ module.exports = {
       },
    ],
 
+   beforeConstruct (self, options) {
+      self.log = debug(self.__meta.name);
+      if (options.verbose) {
+         debug.enable(`${self.__meta.name}:*`);
+      }
+   },
+
    afterConstruct (self) {
 
       require('./lib/instagram-oembetter')(self, self.apos.oembed.oembetter);
@@ -65,36 +77,40 @@ module.exports = {
 
    construct (self, options) {
 
-      self.pushAssets = _.wrap(self.pushAssets, (superFn) => {
-
+      self.pushAssets = wrap(self.pushAssets, (superFn) => {
          self.pushAsset('stylesheet', 'always', { when: 'always', data: true });
          superFn();
       });
 
-      self.load = _.wrap(self.load, load);
-      self.sanitize = _.wrap(self.sanitize, sanitize);
+      self.load = wrap(self.load, load);
+      self.sanitize = wrap(self.sanitize, sanitize);
 
       function sanitize (superFn, req, input, callback) {
+         const log = self.log.extend('sanitize');
          superFn(req, input, async (err, data) => {
 
             if (err) {
+               log('apostrophe-widgets error: "%s"', err);
                return callback(err, data);
             }
 
             if (data.style !== 'single') {
+               log('early return for data.style="%s"', data.style);
                return callback(err, data);
             }
 
-
             if (!/^https?:\/\/(www\.)?instagram\.com\/p\//.test(data.url)) {
+               log('url error, must be instagram.com/p, got "%s"', data.url);
                return callback(new Error('URL must be an instagram image post URL'));
             }
 
             try {
                data._embed = await oEmbed(req, data.url);
+               log('successfully loaded "%s"', data.url);
                callback(null, data);
             }
             catch (e) {
+               log('error: "%s"', e);
                callback(e);
             }
 
@@ -121,10 +137,14 @@ module.exports = {
       }
 
       async function singleWidget (req, widget) {
+         const log = self.log.extend('singleWidget');
          try {
+            log('"%s" - loading', widget.url);
             widget._embed = await oEmbed(req, widget.url);
+            log('"%s" - finished', widget.url);
          }
          catch (e) {
+            log('"%s" - error %s', widget.url, e);
             widget._embed = null;
          }
       }
@@ -146,15 +166,21 @@ module.exports = {
       }
 
       async function latestWidget (widget) {
+         const log = self.log.extend('latestWidget');
+         log(widget.username);
+
          const profileLoader = new InstagramProfileLoader(widget.username);
-         if (_.get(self, 'apos.options.locals.offline') === true) {
+         if (get(self, 'apos.options.locals.offline') === true) {
+            log(`offline-mode: profile not loaded`);
             return widget._profile = null;
          }
 
          try {
             widget._profile = await profileLoader.get();
+            log('%s successfully loaded', widget.username);
          }
          catch (e) {
+            log('%s error %s', widget.username, e);
             widget._profile = null;
          }
       }
