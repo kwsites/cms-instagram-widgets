@@ -1,7 +1,7 @@
 
 # Change History & Release Notes
 
-## 0.9.0 - logging
+## 0.9.1 - logging
 
 - Adds `debug` to handle optionally logging to the console
 

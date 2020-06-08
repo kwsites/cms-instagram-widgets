@@ -7,7 +7,7 @@ module.exports = {
 
    label: 'Instagram Widget',
 
-   verbose: true,
+   verbose: false,
 
    addFields: [
       {
