@@ -90,10 +90,13 @@ Options passed into the module configuration in your `app.js`:
   sets the source of your instagram authentication credentials, can be omitted entirely to fetch as a guest (note that guest access will likely not work in production due to rate limiting etc)
 
 - `cacheTTL: number = 86400`
-  sets the duration a profile gallery should be cached before re-fetching
+  sets the duration (in seconds) a profile gallery should be cached before re-fetching
 
 - `cacheEnabled: boolean = true`
   optionally disable the ability to cache profile galleries
+
+- `errorTTL: number = 1200`
+  sets the duration (in seconds) to wait before reattempting to load a profile gallery that returned an error.
 
 ## Offline Mode
 
