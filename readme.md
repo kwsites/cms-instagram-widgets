@@ -82,6 +82,26 @@ apostrophe({ modules: { '@kwsites/cms-instagram-widgets': {
  } } });
 ```
 
+## Configuration Options
+
+Options passed into the module configuration in your `app.js`:
+
+- `auth: { source: 'inline' | 'env'; user: string; pass: string }`
+  sets the source of your instagram authentication credentials, can be omitted entirely to fetch as a guest (note that guest access will likely not work in production due to rate limiting etc)
+
+- `cacheTTL: number = 86400`
+  sets the duration a profile gallery should be cached before re-fetching
+
+- `cacheEnabled: boolean = true`
+  optionally disable the ability to cache profile galleries
+
+## Offline Mode
+
+Set the global `apos.options.locals.offline` to `true` by adding `offline: true` to your `data/local.js` to prevent
+attempting to fetch profiles remotely, useful when working offline to return early rather than attempt to connect to
+the remote instagram server.
+
+
 ## Post-Install
 
 At the time of publishing, [Apostrophe CMS](https://apostrophecms.org/) doesn't automatically support `@scoped/` dependency modules,
