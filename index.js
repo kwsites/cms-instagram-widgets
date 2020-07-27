@@ -1,6 +1,5 @@
 const debug = require('debug');
-const {get, wrap} = require('lodash');
-const {InstagramProfileLoader} = require('./lib/instagram-profile-loader');
+const {wrap} = require('lodash');
 
 module.exports = {
    extend: 'apostrophe-widgets',
@@ -71,11 +70,17 @@ module.exports = {
 
    afterConstruct (self) {
 
+      self.enableCache();
       require('./lib/instagram-oembetter')(self, self.apos.oembed.oembetter);
 
    },
 
    construct (self, options) {
+
+      require('./lib/instagram-profile-cache')(self, options);
+      require('./lib/instagram-anon-profile-loader')(self, options);
+      require('./lib/instagram-auth-profile-loader')(self, options);
+      require('./lib/latest-gallery-widget')(self, options);
 
       self.pushAssets = wrap(self.pushAssets, (superFn) => {
          self.pushAsset('stylesheet', 'always', { when: 'always', data: true });
@@ -126,7 +131,7 @@ module.exports = {
 
             widget.style = 'latest';
             if (widget.username) {
-               return await latestWidget(widget);
+               return await self.latestGalleryWidget(widget);
             }
 
          });
@@ -163,26 +168,6 @@ module.exports = {
                done(data);
             });
          });
-      }
-
-      async function latestWidget (widget) {
-         const log = self.log.extend('latestWidget');
-         log(widget.username);
-
-         const profileLoader = new InstagramProfileLoader(widget.username);
-         if (get(self, 'apos.options.locals.offline') === true) {
-            log(`offline-mode: profile not loaded`);
-            return widget._profile = null;
-         }
-
-         try {
-            widget._profile = await profileLoader.get();
-            log('%s successfully loaded', widget.username);
-         }
-         catch (e) {
-            log('%s error %s', widget.username, e);
-            widget._profile = null;
-         }
       }
 
    }
