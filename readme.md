@@ -16,7 +16,9 @@ Add both libraries to your `app.js`:
 apostrophe({
   modules: {
     '@kwsites/cms-common': {},
-    '@kwsites/cms-instagram-widgets': {},
+    '@kwsites/cms-instagram-widgets': {
+      auth: { /* see authentication below */ }
+    },
   }
 });
 ```
@@ -37,6 +39,47 @@ To use the widget in an `area`:
     }
   )
 }}
+```
+
+## Authentication
+
+Periodically instagram will require that a valid Instagram account has logged into the site for the IP and "device"
+to show profile data. To manage the interaction with Instagram, this library uses
+[instagram-private-api](https://npmjs.com/package/instagram-private-api). Configure your account username/password
+using one of the options below:
+
+With `source=inline`, the username and password are used as-is from the module's configuration in `app.js`:
+
+```javascript
+const auth = { source: 'inline', user: 'USERNAME', pass: 'PASSWORD' };
+```
+
+With `source=env`, the username and password are read from the named environment variables:
+
+```javascript
+process.env.IG_USER = 'USERNAME';
+process.env.IG_PASS = 'PASSWORD';
+const auth = { source: 'env', user: 'IG_USER', pass: 'IG_PASS' };
+```
+
+```javascript
+// set your auth options in the app.js configuration of the module
+apostrophe({ modules: { '@kwsites/cms-instagram-widgets': { auth } } });
+```
+
+For a completely custom way to deliver your credentials, extend the module:
+
+```javascript
+apostrophe({ modules: { '@kwsites/cms-instagram-widgets': {
+   construct (self, options) {
+      // override the validation logic,
+      // returning a non-empty string is deemed a validation failure
+      self.validateAuthConfig = () => '';
+
+      // get the username and password as a string array
+      self.getApiAuth = () => ['USERNAME', 'PASSWORD'];
+   }
+ } } });
 ```
 
 ## Post-Install

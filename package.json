@@ -22,10 +22,11 @@
   "license": "MIT",
   "repository": "git://github.com/kwsites/cms-instagram-widgets.git",
   "dependencies": {
-    "@kwsites/promise-cache": "^0.0.1",
+    "@kwsites/promise-result": "^1.1.0",
     "bent": "^7.3.2",
     "debug": "^4.1.1",
-    "lodash": "^4",
+    "instagram-private-api": "^1.41.0",
+    "lodash": "^4.17.19",
     "parse5": "^6.0.0"
   }
 }
