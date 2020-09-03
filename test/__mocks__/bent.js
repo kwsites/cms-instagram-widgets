@@ -3,20 +3,21 @@ const $matches = [];
 const $get = (url) => jest.requireActual('bent')(200, 'GET', 'string')(url);
 const $json = (url) => jest.requireActual('bent')(200, 'GET', 'json')(url);
 const $reset = () => $matches.length = $requests.length = 0;
-const $urlMatching = (url, data) => $requests
-   .filter(r => r.url.includes(url))
-   .forEach(r => r.send(data));
-const $theUrl = (url) => $requests
-   .filter(r => r.url.includes(url));
+const $urlMatching = (url, data) =>
+   $requests
+      .filter(r => r.url.includes(url))
+      .forEach(r => r.send(data));
+
+const $theUrl = (url) =>
+   $requests
+      .filter(r => r.url.includes(url));
+
 const $respondTo = (url) => ({
    withHtml (html) {
       $matches.push({
-         test (req) {
-            return req.includes(url)
-         }, send () {
-            return html
-         }
-      })
+         test: (req) => req.includes(url),
+         send: () => html,
+      });
    }
 });
 

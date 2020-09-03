@@ -28,6 +28,7 @@ module.exports = (self, {cacheTTL = 86400, errorTTL = 1200, cacheEnabled = true}
       if (err) {
          log('setCachedResult: persistence error: "%s" %o', userName, err);
       }
+      await self.emit('cachedResult', {userName, ttl, error: error || err || null});
    }
 
    async function getCachedResult (userName) {

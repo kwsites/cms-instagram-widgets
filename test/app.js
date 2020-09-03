@@ -2,6 +2,8 @@ import { promiseError, promiseResult } from "@kwsites/promise-result";
 import { join } from "path";
 import apostrophe from "apostrophe";
 
+let cacheCollectionSuffix = 0;
+
 function mockLogger () {
    const logs = new Map();
    const save = (level, ...args) => logs.set(level, add2(args, logs.get(level)));
@@ -66,48 +68,6 @@ export async function createApos (moduleConfig = {}) {
    return result;
 }
 
-const builders = (function () {
-   const all = new WeakMap();
-
-   return {
-      add () {
-         const builder = {};
-         all.set(builder, {});
-         return builder;
-      },
-      and (builder, key, value) {
-         all.get(builder)[key] = value;
-         return builder;
-      },
-      merge (builder, opt) {
-         Object.assign(all.get(builder), opt);
-         return builder;
-      },
-      get (builder) {
-         return all.get(builder) || builder;
-      }
-   };
-}());
-
-export function pageAreaItem () {
-   const builder = Object.assign(builders.add(), {
-      ofType (type) {
-         return builders.and(builder, 'type', type);
-      },
-      options (options) {
-         return builders.merge(builder, options);
-      },
-   });
-   return builder;
-}
-
-export function pageArea (...items) {
-   return {
-      type: 'area',
-      items: items.map(item => builders.get(item)),
-   };
-}
-
 export function parkedPage ({title = 'Page Title', type = 'default', slug = '/page-url', published = true, body} = {}) {
    return {
       title,
@@ -125,6 +85,14 @@ export function createAposModulesConfig (config = {}, parkedPages = []) {
       ...minimalModuleConfig(),
       '@kwsites/cms-instagram-widgets': {},
       'apostrophe-override-options': {},
+      'apostrophe-caches': {
+         construct (self, options) {
+            self.getCollection = async (callback) => {
+               self.cacheCollection = await self.apos.db.collection(`aposCacheCollection${ ++cacheCollectionSuffix }`);
+               callback(null);
+            }
+         }
+      },
       'apostrophe-pages': {
          park: [
             ...parkedPages,
@@ -147,6 +115,14 @@ export function createAposModulesConfig (config = {}, parkedPages = []) {
             }
          }
       },
-      'products-pages': { extend: 'apostrophe-pieces-pages' },
+      'products-pages': {},
+      'page-counter': {
+         construct (self, options) {
+            let counter = 0;
+            self.pageBeforeSend = (req, callback) => {
+               callback(null, req.data.counter = ++counter);
+            };
+         }
+      }
    });
 }

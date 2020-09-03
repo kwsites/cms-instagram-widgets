@@ -3,7 +3,12 @@
   "private": true,
   "version": "1.1.0",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "docker:mongo-express": "docker run --rm -e \"ME_CONFIG_MONGODB_PORT=$npm_package_config_mongodb_port\" -e ME_CONFIG_MONGODB_SERVER=host.docker.internal -p \"${npm_package_config_mongo_express_port}:8081\" mongo-express"
+  },
+  "config": {
+    "mongodb_port": 27072,
+    "mongo_express_port": 8081
   },
   "dependencies": {
     "@babel/core": "^7.10.1",

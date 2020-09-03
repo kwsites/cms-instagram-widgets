@@ -1,3 +1,5 @@
+const {config: { mongodb_port: port } } = require('./package.json');
+
 module.exports = {
    mongodbMemoryServerOptions: {
       binary: {
@@ -6,6 +8,7 @@ module.exports = {
       },
       autoStart: false,
       instance: {
+         port
       }
    }
 };

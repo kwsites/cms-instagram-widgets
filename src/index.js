@@ -67,7 +67,7 @@ module.exports = {
    ],
 
    beforeConstruct (self, options) {
-      self.log = debug(self.__meta.name);
+      self.log = debug(options.logName || self.__meta.name);
       if (options.verbose) {
          debug.enable(`${ self.__meta.name }:*`);
       }
@@ -132,19 +132,35 @@ module.exports = {
       }
 
       async function load (superFn, req, widgets, callback) {
+         self.log(`load widgets(%s)`, widgets.length);
          const loaders = widgets.map(async (widget) => {
             if (widget.style === 'single') {
+               self.log(`load single widget, %O`, widget);
                return await self.loadSingleEmbedWidget(req, widget);
             }
 
-            Object.assign(widget, await self.latestGalleryWidget(widget, widget.username || self.getOption(req, 'galleryUserName')));
+            let username;
+            if ((username = widget.username)) {
+               self.log(`load gallery widget for %s, set in widget configuration`, username);
+            }
+            else if ((username = self.getOption(req, 'galleryUserName'))) {
+               self.log(`load gallery widget for %s, read from 'getOption("galleryUserName")`, username);
+            }
+            else {
+               self.log(`load gallery widget unable to find username`);
+               return;
+            }
+
+            Object.assign(widget, await self.latestGalleryWidget(widget, username));
          });
 
          const err = await promiseError(Promise.all(loaders));
          if (err) {
+            self.log('load:error %o', err);
             return callback(err);
          }
 
+         self.log('load:complete %O', widgets);
          superFn(req, widgets, callback);
       }
    }
