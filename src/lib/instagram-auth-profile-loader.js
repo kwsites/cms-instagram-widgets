@@ -17,11 +17,12 @@ module.exports = (self, options) => {
    });
 
    function validateAuthConfig () {
-      if (!options.auth) {
+      const authConfig = self.getAuthConfig();
+      if (!authConfig) {
          return 'Authentication not configured';
       }
 
-      const {source = 'inline', ...auth} = options.auth;
+      const {source = 'inline', ...auth} = authConfig;
       const message = [];
       ['user', 'pass'].forEach(prop => {
          if (!auth[prop]) {
@@ -44,7 +45,7 @@ module.exports = (self, options) => {
    }
 
    function getApiAuth () {
-      const {source, user, pass} = {source: 'inline', ...(options.auth || {})};
+      const {source, user, pass} = {source: 'inline', ...(self.getAuthConfig() || {})};
       switch (source) {
          case 'env':
             return [process.env[user], process.env[pass]];

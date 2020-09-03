@@ -1,0 +1,25 @@
+{
+  "name": "@kwsites/widget-test",
+  "private": true,
+  "version": "1.1.0",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "dependencies": {
+    "@babel/core": "^7.10.1",
+    "@babel/preset-env": "^7.10.1",
+    "@kwsites/cms-common": "^0.6.0",
+    "@kwsites/cms-instagram-widgets": "1.1.0",
+    "apostrophe": "^2.111.2",
+    "apostrophe-override-options": "^2.2.1",
+    "babel-jest": "^26.0.1",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "bent": "^7.3.10",
+    "jest": "^26.4.2"
+  },
+  "devDependencies": {
+    "@kwsites/promise-deferred": "^1.1.1",
+    "@shelf/jest-mongodb": "^1.2.3",
+    "mongodb": "^3.6.0"
+  }
+}

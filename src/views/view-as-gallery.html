@@ -1,0 +1,19 @@
+<article class="kwsites-instagram-widget {%- block articleClasses %}{%- endblock %}" data-gallery-user="{{ username }}">
+   {%- if data.widget.title %}<header>{{ data.widget.title }}</header>{% endif -%}
+   {%- if data.widget._profile.media -%}
+   <ul data-column-count="{{ data.widget.columns or data.widget.getOption('columns') }}">
+      {%- set media = data.widget._profile.media -%}
+      {%- set limit = data.widget.limit if (data.widget.limit > 0) else media.length -%}
+      {%- set thumbnails = data.widget._profile.media.slice(0, limit) -%}
+
+      {%- for thumbnail in thumbnails -%}
+         {%- block thumbnail -%}
+         <li style="background-image: url('{{ thumbnail.thumbnailUrl }}')">
+            <a class="kwsites-instagram-link" href="{{ thumbnail.displayUrl }}" target="_blank"
+               title="{{ thumbnail.caption | truncate(100, false, '... Read More') }}"></a>
+         </li>
+         {%- endblock -%}
+      {%- endfor -%}
+   </ul>
+   {%- endif -%}
+</article>

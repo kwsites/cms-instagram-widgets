@@ -1,5 +1,9 @@
 .idea/
 node_modules/
+globalConfig.json
+
+test/public
+test/data
 
 *.log
 *.bak
