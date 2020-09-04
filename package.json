@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "clean:workspace": "git clean -fxd -e .idea -e node_modules",
+    "clean:workspace": "git clean -fxd -e .idea",
     "clean:packages": "lerna exec -- git clean -nxd",
     "clean": "yarn clean:workspace && yarn clean:packages",
     "lerna": "lerna",

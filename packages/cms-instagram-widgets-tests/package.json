@@ -15,7 +15,7 @@
     "@babel/core": "^7.10.1",
     "@babel/preset-env": "^7.10.1",
     "@kwsites/cms-common": "^0.6.0",
-    "@kwsites/cms-instagram-widgets": "workspace:*",
+    "@kwsites/cms-instagram-widgets": "1.1.0",
     "apostrophe": "^2.111.2",
     "apostrophe-override-options": "^2.2.1",
     "babel-jest": "^26.0.1",
