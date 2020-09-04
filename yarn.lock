@@ -1949,7 +1949,7 @@ __metadata:
     "@babel/core": ^7.10.1
     "@babel/preset-env": ^7.10.1
     "@kwsites/cms-common": ^0.6.0
-    "@kwsites/cms-instagram-widgets": "workspace:*"
+    "@kwsites/cms-instagram-widgets": 1.1.0
     "@kwsites/promise-deferred": ^1.1.1
     "@shelf/jest-mongodb": ^1.2.3
     apostrophe: ^2.111.2
@@ -1962,7 +1962,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kwsites/cms-instagram-widgets@workspace:*, @kwsites/cms-instagram-widgets@workspace:packages/cms-instagram-widgets":
+"@kwsites/cms-instagram-widgets@1.1.0, @kwsites/cms-instagram-widgets@workspace:packages/cms-instagram-widgets":
   version: 0.0.0-use.local
   resolution: "@kwsites/cms-instagram-widgets@workspace:packages/cms-instagram-widgets"
   dependencies:
