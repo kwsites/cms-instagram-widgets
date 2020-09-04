@@ -10,13 +10,5 @@ module.exports = {
             },
          },
       ],
-   ],
-   plugins: [
-      ['module-resolver', {
-         root: '.',
-         alias: {
-            '@kwsites/cms-instagram-widgets': joinPaths(__dirname, '..', 'cms-instagram-widgets'),
-         },
-      }],
-   ],
+   ]
 };

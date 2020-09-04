@@ -1,7 +1,7 @@
 {
   "name": "@kwsites/cms-instagram-widgets",
   "description": "Instagram widget compatible with the apostrophe cms",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Steve King <steve@mydev.co>",
   "contributors": [
     {
@@ -20,7 +20,11 @@
     "views/**/*.*"
   ],
   "license": "MIT",
-  "repository": "git://github.com/kwsites/cms-instagram-widgets.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kwsites/cms-instagram-widgets.git",
+    "directory": "packages/cms-instagram-widgets"
+  },
   "dependencies": {
     "@kwsites/promise-result": "^1.1.0",
     "bent": "^7.3.10",

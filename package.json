@@ -1,14 +1,14 @@
 {
   "name": "@kwsites/cms-workspace",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "bootstrap": "yarn set version berry && yarn plugin import workspace-tools && yarn plugin import version && yarn install",
     "clean:workspace": "git clean -fxd -e .idea",
     "clean:packages": "lerna exec -- git clean -nxd",
     "clean": "yarn clean:workspace && yarn clean:packages",
-    "lerna": "lerna",
-    "test": "lerna run test"
+    "test:bak": "yarn workspaces foreach run test",
+    "test": "yarn workspaces foreach run hello"
   },
   "workspaces": [
     "packages/*"
