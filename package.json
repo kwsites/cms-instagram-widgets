@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
+    "bootstrap": "yarn set version berry && yarn plugin import workspace-tools && yarn plugin import version && yarn install",
     "clean:workspace": "git clean -fxd -e .idea",
     "clean:packages": "lerna exec -- git clean -nxd",
     "clean": "yarn clean:workspace && yarn clean:packages",
