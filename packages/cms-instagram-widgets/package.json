@@ -2,7 +2,6 @@
   "name": "@kwsites/cms-instagram-widgets",
   "description": "Instagram widget compatible with the apostrophe cms",
   "version": "1.1.0",
-  "private": false,
   "author": "Steve King <steve@mydev.co>",
   "contributors": [
     {
@@ -11,6 +10,7 @@
     }
   ],
   "scripts": {
+    "hello": "echo $INIT_CWD",
     "postversion": "npm publish && git push && git push --tags"
   },
   "files": [
@@ -28,5 +28,8 @@
     "instagram-private-api": "^1.41.0",
     "lodash": "^4.17.19",
     "parse5": "^6.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.1.1"
   }
 }

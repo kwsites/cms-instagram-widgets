@@ -1,8 +1,9 @@
 {
-  "name": "@kwsites/widget-test",
+  "name": "@kwsites/cms-instagram-widgets-tests",
   "private": true,
   "version": "1.1.0",
   "scripts": {
+    "hello": "echo $INIT_CWD",
     "test": "jest --coverage",
     "docker:mongo-express": "docker run --rm -e \"ME_CONFIG_MONGODB_PORT=$npm_package_config_mongodb_port\" -e ME_CONFIG_MONGODB_SERVER=host.docker.internal -p \"${npm_package_config_mongo_express_port}:8081\" mongo-express"
   },
@@ -14,7 +15,7 @@
     "@babel/core": "^7.10.1",
     "@babel/preset-env": "^7.10.1",
     "@kwsites/cms-common": "^0.6.0",
-    "@kwsites/cms-instagram-widgets": "1.1.0",
+    "@kwsites/cms-instagram-widgets": "workspace:*",
     "apostrophe": "^2.111.2",
     "apostrophe-override-options": "^2.2.1",
     "babel-jest": "^26.0.1",
