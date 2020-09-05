@@ -1,7 +1,7 @@
 
 # Change History & Release Notes
 
-## 1.0.0 - Overridable options, target apostrophe 2.111
+## 2.0.1 - Overridable options, target apostrophe 2.111
 
 - Switched to using `getOption` for all places the gallery profile is looked up, to allow
   altering it based on the page / piece properties where the gallery is being rendered. For
