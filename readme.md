@@ -74,7 +74,7 @@ apostrophe({ modules: { '@kwsites/cms-instagram-widgets': {
    construct (self, options) {
       // override the validation logic,
       // returning a non-empty string is deemed a validation failure
-      self.validateAuthConfig = () => '';
+      self.validateAuthConfig = (req) => '';
 
       // get the username and password as a string array
       self.getApiAuth = () => ['USERNAME', 'PASSWORD'];

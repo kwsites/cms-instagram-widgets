@@ -1,12 +1,17 @@
+const {promiseError} = require('@kwsites/promise-result');
 const debug = require('debug');
-const {wrap} = require('lodash');
+const {get, wrap} = require('lodash');
 
 module.exports = {
    extend: 'apostrophe-widgets',
 
+   defer: true,
+
    label: 'Instagram Widget',
 
    verbose: false,
+
+   galleryUserName: '',
 
    addFields: [
       {
@@ -62,9 +67,9 @@ module.exports = {
    ],
 
    beforeConstruct (self, options) {
-      self.log = debug(self.__meta.name);
+      self.log = debug(options.logName || self.__meta.name);
       if (options.verbose) {
-         debug.enable(`${self.__meta.name}:*`);
+         debug.enable(`${ self.__meta.name }:*`);
       }
    },
 
@@ -77,13 +82,18 @@ module.exports = {
 
    construct (self, options) {
 
+      self.isWorkingOffline = () => get(self, 'apos.options.locals.offline') === true;
+      self.getAuthConfig = (req) => self.getOption(req, 'auth');
+
       require('./lib/instagram-profile-cache')(self, options);
       require('./lib/instagram-anon-profile-loader')(self, options);
       require('./lib/instagram-auth-profile-loader')(self, options);
+
       require('./lib/latest-gallery-widget')(self, options);
+      require('./lib/single-embed-widget')(self, options);
 
       self.pushAssets = wrap(self.pushAssets, (superFn) => {
-         self.pushAsset('stylesheet', 'always', { when: 'always', data: true });
+         self.pushAsset('stylesheet', 'always', {when: 'always', data: true});
          superFn();
       });
 
@@ -113,8 +123,7 @@ module.exports = {
                data._embed = await oEmbed(req, data.url);
                log('successfully loaded "%s"', data.url);
                callback(null, data);
-            }
-            catch (e) {
+            } catch (e) {
                log('error: "%s"', e);
                callback(e);
             }
@@ -122,54 +131,48 @@ module.exports = {
          });
       }
 
-      function load (superFn, req, widgets, callback) {
+      const widgetReqCache = new WeakMap();
+      self.widgetReq = (widget, req) => {
+         if (arguments.length === 2) {
+            widgetReqCache.set(widget, req);
+         }
+         return widgetReqCache.get(widget);
+      };
+
+      async function load (superFn, req, widgets, callback) {
+         self.log(`load widgets(%s)`, widgets.length);
          const loaders = widgets.map(async (widget) => {
+            self.widgetReq(widget, req);
 
             if (widget.style === 'single') {
-               return await singleWidget(req, widget);
+               self.log(`load single widget, %O`, widget);
+               return await self.loadSingleEmbedWidget(req, widget);
             }
 
-            widget.style = 'latest';
-            if (widget.username) {
-               return await self.latestGalleryWidget(widget);
+            let username;
+            if ((username = widget.username)) {
+               self.log(`load gallery widget for %s, set in widget configuration`, username);
+            }
+            else if ((username = self.getOption(req, 'galleryUserName'))) {
+               self.log(`load gallery widget for %s, read from 'getOption("galleryUserName")`, username);
+            }
+            else {
+               self.log(`load gallery widget unable to find username`);
+               return;
             }
 
+            Object.assign(widget, await self.latestGalleryWidget(req, username));
          });
 
-         Promise.all(loaders)
-            .then(() => superFn(req, widgets, callback))
-            .catch((err) => callback(err));
-      }
-
-      async function singleWidget (req, widget) {
-         const log = self.log.extend('singleWidget');
-         try {
-            log('"%s" - loading', widget.url);
-            widget._embed = await oEmbed(req, widget.url);
-            log('"%s" - finished', widget.url);
+         const err = await promiseError(Promise.all(loaders));
+         if (err) {
+            self.log('load:error %o', err);
+            return callback(err);
          }
-         catch (e) {
-            log('"%s" - error %s', widget.url, e);
-            widget._embed = null;
-         }
+
+         self.log('load:complete %O', widgets);
+         superFn(req, widgets, callback);
       }
-
-      function oEmbed (req, url) {
-         return new Promise((done, fail) => {
-
-            self.apos.oembed.query(req, url.replace(/\?.+$/, ''), {neverOpenGraph: true}, (err, data) => {
-
-               if (err) {
-                  return fail(err);
-               }
-
-               data.html = data.html.replace(/<script[^>]*>.*<\/script[^>]*>/g, '');
-
-               done(data);
-            });
-         });
-      }
-
    }
 
 };
