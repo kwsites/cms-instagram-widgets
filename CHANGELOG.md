@@ -1,6 +1,11 @@
 
 # Change History & Release Notes
 
+## 2.1.0 - Centred Images
+
+- To cater for non-square aspect ratio images in the grid, centres the images within the
+  available space when viewing a gallery of thumbnails
+
 ## 2.0.1 - Overridable options, target apostrophe 2.111
 
 - Switched to using `getOption` for all places the gallery profile is looked up, to allow
