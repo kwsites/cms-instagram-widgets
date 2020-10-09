@@ -1,7 +1,7 @@
 {
   "name": "@kwsites/cms-instagram-widgets",
   "description": "Instagram widget compatible with the apostrophe cms",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "private": false,
   "author": "Steve King <steve@mydev.co>",
   "contributors": [
